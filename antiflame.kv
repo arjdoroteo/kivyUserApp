@@ -1,0 +1,39 @@
+<MDCard>:
+    padding:20
+    line_color: (0.2, 0.2, 0.2, 0.8)
+    elevation: 10
+    radius: 30
+<myScreen>:
+    name:name
+    MDScreen:
+        
+
+        MDBottomNavigation:
+            MDBottomNavigationItem:
+                name: 'screen 1'
+                text: 'Status'
+                icon: 'monitor-dashboard'
+                
+                GridLayout:
+                    cols: 2
+                    spacing: 15
+                    padding: 15
+                    MDCard:
+                        MDLabel:
+                            id: name
+                            text: 'Hellow'
+                    MDCard:
+                        MDLabel:
+                            text: 'Hellow'
+                    MDCard:
+                        MDLabel:
+                            text: 'Hellow'
+            MDBottomNavigationItem:
+                name: 'screen 2'
+                text: 'Profile'
+                icon: 'card-account-details'
+                BoxLayout:
+                    padding: 40
+                    MDCard:
+                        MDLabel:
+                            text: 'Hello World'
