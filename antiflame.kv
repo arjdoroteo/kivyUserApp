@@ -1,8 +1,8 @@
 <MDCard>:
     padding:20
-    line_color: (0.2, 0.2, 0.2, 0.8)
     elevation: 10
     radius: 30
+
 <myScreen>:
     name:name
     MDScreen:
@@ -19,15 +19,24 @@
                     spacing: 15
                     padding: 15
                     MDCard:
+                        MDIcon:
+                            icon: 'thermometer-low'
+                            font_size: 60
                         MDLabel:
                             id: name
-                            text: 'Hellow'
+                            text: '30 C'
                     MDCard:
+                        MDIcon:
+                            icon: 'molecule-co'
+                            font_size: 60
                         MDLabel:
-                            text: 'Hellow'
+                            text: '100 PPM'
                     MDCard:
+                        MDIcon:
+                            icon: 'gas-cylinder'
+                            font_size: 60
                         MDLabel:
-                            text: 'Hellow'
+                            text: '200 PPM'
             MDBottomNavigationItem:
                 name: 'screen 2'
                 text: 'Profile'
