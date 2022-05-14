@@ -3,46 +3,47 @@
     elevation: 10
     radius: 30
 
-<myScreen>:
-    name:name
-    MDScreen:
-        
 
-        MDBottomNavigation:
-            MDBottomNavigationItem:
-                name: 'screen 1'
-                text: 'Status'
-                icon: 'monitor-dashboard'
-                
-                GridLayout:
-                    cols: 2
-                    spacing: 15
-                    padding: 15
-                    MDCard:
-                        MDIcon:
-                            icon: 'thermometer-low'
-                            font_size: 60
-                        MDLabel:
-                            id: name
-                            text: '30 C'
-                    MDCard:
-                        MDIcon:
-                            icon: 'molecule-co'
-                            font_size: 60
-                        MDLabel:
-                            text: '100 PPM'
-                    MDCard:
-                        MDIcon:
-                            icon: 'gas-cylinder'
-                            font_size: 60
-                        MDLabel:
-                            text: '200 PPM'
-            MDBottomNavigationItem:
-                name: 'screen 2'
-                text: 'Profile'
-                icon: 'card-account-details'
-                BoxLayout:
-                    padding: 40
-                    MDCard:
-                        MDLabel:
-                            text: 'Hello World'
+Screen:
+    MDBottomNavigation:
+        MDBottomNavigationItem:
+            name: 'screen 1'
+            text: 'Status'
+            icon: 'monitor-dashboard'
+            
+            GridLayout:
+                cols: 2
+                spacing: 15
+                padding: 15
+                MDCard:
+                    MDIcon:
+                        icon: 'thermometer-low'
+                        font_size: 60
+                    MDLabel:
+                        id: name
+                        text: '30 C'
+                MDCard:
+                    MDIcon:
+                        icon: 'molecule-co'
+                        font_size: 60
+                    MDLabel:
+                        text: '100 PPM'
+                MDCard:
+                    MDIcon:
+                        icon: 'gas-cylinder'
+                        font_size: 60
+                    MDLabel:
+                        text: '200 PPM'
+                MDFlatButton:
+                    text:'submit'
+                    on_press: app.btn()
+
+        MDBottomNavigationItem:
+            name: 'screen 2'
+            text: 'Profile'
+            icon: 'card-account-details'
+            BoxLayout:
+                padding: 40
+                MDCard:
+                    MDLabel:
+                        text: 'Hello World'
