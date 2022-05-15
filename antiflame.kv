@@ -4,7 +4,7 @@
     radius: 30
 
 
-Screen:
+MDScreen:
     MDBottomNavigation:
         MDBottomNavigationItem:
             name: 'screen 1'
@@ -20,23 +20,22 @@ Screen:
                         icon: 'thermometer-low'
                         font_size: 60
                     MDLabel:
-                        id: name
+                        id: temp
                         text: '30 C'
                 MDCard:
                     MDIcon:
                         icon: 'molecule-co'
                         font_size: 60
                     MDLabel:
+                        id: co
                         text: '100 PPM'
                 MDCard:
                     MDIcon:
                         icon: 'gas-cylinder'
                         font_size: 60
                     MDLabel:
+                        id: lpg
                         text: '200 PPM'
-                MDFlatButton:
-                    text:'submit'
-                    on_press: app.btn()
 
         MDBottomNavigationItem:
             name: 'screen 2'
@@ -46,4 +45,5 @@ Screen:
                 padding: 40
                 MDCard:
                     MDLabel:
-                        text: 'Hello World'
+                        id: userinfo
+                        text: ''
