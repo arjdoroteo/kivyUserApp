@@ -12,7 +12,7 @@ class AntiflameApp(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Clock.schedule_once(self.decryption)
-        Clock.schedule_interval(self.pymongo, 1)
+        Clock.schedule_interval(self.pymongo, 5)
 
     def build(self):
         Window.size = [450, 800]
