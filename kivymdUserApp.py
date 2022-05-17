@@ -6,17 +6,42 @@ from Crypto.Util.Padding import unpad
 import pymongo
 from pymongo import MongoClient
 from kivy.clock import Clock
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton, MDRectangleFlatButton
 
 
 class AntiflameApp(MDApp):
+    dialog = None
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Clock.schedule_once(self.decryption)
-        Clock.schedule_interval(self.pymongo, 5)
+        self.event = Clock.schedule_interval(self.pymongo, 5)
 
     def build(self):
         Window.size = [450, 800]
         return
+
+    def showDialog(self, temp, co, lpg):
+        Clock.unschedule(self.event)
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title='Emergency',
+                text='Limit Reached! Please check your system.',
+                buttons=[
+                    MDFlatButton(
+                        text="OK",
+                        on_release=self.close_dialog
+                    )
+                ]
+            )
+        self.dialog.open()
+        print(temp, co, lpg)
+        Clock.stop_clock()
+
+    def close_dialog(self, obj):
+        self.event()
+        self.dialog.dismiss()
 
     def pymongo(self, dt):
         cluster = MongoClient(
@@ -25,9 +50,22 @@ class AntiflameApp(MDApp):
         collection = db['arjdoroteo']
         results = collection.find().sort('_id', -1).limit(1)
         for result in results:
-            self.root.ids.temp.text = str(result['Temperature']) + ' C'
-            self.root.ids.co.text = str(result['CO']) + ' PPM'
-            self.root.ids.lpg.text = str(result['LPG']) + ' PPM'
+            temp = str(result['Temperature'])
+            co = str(result['CO'])
+            lpg = str(result['LPG'])
+
+        self.root.ids.temp.text = temp + ' C'
+        self.root.ids.co.text = co + ' PPM'
+        self.root.ids.lpg.text = lpg + ' PPM'
+
+        temp_limit = 125
+        co_limit = 100
+        lpg_limit = 10000
+
+        if float(temp) >= temp_limit or float(co) >= co_limit or float(lpg) >= lpg_limit:
+            self.showDialog(temp, co, lpg)
+        else:
+            pass
 
     def decryption(self, dt):
         cluster = MongoClient(
