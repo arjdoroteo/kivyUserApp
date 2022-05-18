@@ -7,17 +7,43 @@ import pymongo
 from pymongo import MongoClient
 from kivy.clock import Clock
 from kivy_garden.mapview import MapView, MapMarkerPopup, MapMarker
+from kivy.uix.widget import Widget
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton, MDRectangleFlatButton
 
 
 class CentralApp(MDApp):
+    dialog = None
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Clock.schedule_once(self.decryptionUserInfo)
-        Clock.schedule_interval(self.decryptionUserInfo, 15)
+        self.event = Clock.schedule_interval(self.decryptionUserInfo, 15)
 
     def build(self):
 
         return
+
+    def showDialog(self, temp, lpg, co):
+        Clock.unschedule(self.event)
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title='Emergency',
+                text='Limit Reached! Please check your system.',
+                buttons=[
+                    MDFlatButton(
+                        text="OK",
+                        on_release=self.close_dialog
+                    )
+                ]
+            )
+        self.dialog.open()
+        print(temp, co, lpg)
+        Clock.stop_clock()
+
+    def close_dialog(self, obj):
+        self.event()
+        self.dialog.dismiss()
 
     def pymongo(self):
         cluster = MongoClient(
@@ -31,6 +57,20 @@ class CentralApp(MDApp):
             data.append(result['Temperature'])
             data.append(result['LPG'])
             data.append(result['CO'])
+
+        temp_limit = 125
+        co_limit = 100
+        lpg_limit = 10000
+
+        temp = data[1]
+        lpg = data[2]
+        co = data[3]
+
+        if float(temp) >= temp_limit or float(co) >= co_limit or float(lpg) >= lpg_limit:
+            self.showDialog(temp, lpg, co)
+        else:
+            pass
+
         return data
 
     def decryptionUserInfo(self, dt):
@@ -51,9 +91,12 @@ class CentralApp(MDApp):
         userInfoList = plainText.split(',')
 
         self.root.ids.userinfo.text = str(userInfoList[0])
-        self.root.ids.userinfo.secondary_text = str(data[1]) + \
-            ' C ' + str(data[2]) + ' PPM'
-        self.root.ids.userinfo.tertiary_text = str(data[3]) + ' PPM'
+        self.root.ids.userinfo.secondary_text = 'Temperature: ' + str(data[1]) + \
+            ' C ' + 'LPG: ' + str(data[2]) + ' PPM'
+        self.root.ids.userinfo.tertiary_text = 'CO: '+str(data[3]) + ' PPM'
+
+        self.pin = MapMarkerPopup(lat=userInfoList[1], lon=userInfoList[2])
+        self.root.ids.map.add_widget(self.pin)
 
 
 if __name__ == "__main__":
