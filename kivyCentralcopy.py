@@ -17,7 +17,8 @@ class CentralApp(MDApp):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        Clock.schedule_once(self.decryptionUserInfo, 1)
+        Clock.schedule_once(self.decryptionUserInfo)
+        self.event = Clock.schedule_interval(self.decryptionUserInfo, 15)
 
     def build(self):
 
@@ -28,9 +29,7 @@ class CentralApp(MDApp):
         if not self.dialog:
             self.dialog = MDDialog(
                 title='Emergency',
-                text='Limit Reached! Please check your system.' + 'Temperature: ' +
-                str(temp) + 'C ' + 'LPG: ' + str(lpg) +
-                'PPM ' + 'CO: ' + str(co) + 'PPM',
+                text='Limit Reached! Please check your system.',
                 buttons=[
                     MDFlatButton(
                         text="OK",
@@ -59,9 +58,6 @@ class CentralApp(MDApp):
             data.append(result['LPG'])
             data.append(result['CO'])
 
-        return data
-
-    def compareData(self, data):
         temp_limit = 125
         co_limit = 100
         lpg_limit = 10000
@@ -75,14 +71,7 @@ class CentralApp(MDApp):
         else:
             pass
 
-    def updateSidePanel(self, dt):
-
-        data = self.pymongo()
-        self.root.ids.userinfo.secondary_text = 'Temperature: ' + str(data[1]) + \
-            ' C ' + 'LPG: ' + str(data[2]) + ' PPM'
-        self.root.ids.userinfo.tertiary_text = 'CO: '+str(data[3]) + ' PPM'
-
-        self.compareData(data)
+        return data
 
     def decryptionUserInfo(self, dt):
         data = self.pymongo()
@@ -102,11 +91,12 @@ class CentralApp(MDApp):
         userInfoList = plainText.split(',')
 
         self.root.ids.userinfo.text = str(userInfoList[0])
+        self.root.ids.userinfo.secondary_text = 'Temperature: ' + str(data[1]) + \
+            ' C ' + 'LPG: ' + str(data[2]) + ' PPM'
+        self.root.ids.userinfo.tertiary_text = 'CO: '+str(data[3]) + ' PPM'
 
         self.pin = MapMarkerPopup(lat=userInfoList[1], lon=userInfoList[2])
         self.root.ids.map.add_widget(self.pin)
-
-        self.event = Clock.schedule_interval(self.updateSidePanel, 5)
 
 
 if __name__ == "__main__":
