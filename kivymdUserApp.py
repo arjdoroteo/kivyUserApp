@@ -1,3 +1,4 @@
+from pydoc import plain
 from kivymd.app import MDApp
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
@@ -83,7 +84,10 @@ class AntiflameApp(MDApp):
         cipher = AES.new(key, AES.MODE_CBC, iv)
         plainText = unpad(cipher.decrypt(cipherText), AES.block_size)
 
-        self.root.ids.userinfo.text = str(plainText)
+        stringText = plainText.decode('ascii')
+        user_info_list = stringText.split(",")
+        self.root.ids.userinfo.text = user_info_list[0]
+        print(user_info_list)
 
 
 if __name__ == "__main__":
