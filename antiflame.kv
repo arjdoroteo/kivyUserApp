@@ -44,9 +44,11 @@ MDScreen:
             BoxLayout:
                 padding: 40
                 MDCard:
-                    MDLabel:
-                        id: userinfo
-                        text: ''
-                    MDLabel:
-                        id: userlocation
-                        text: 'Las Pinas City'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        MDLabel:
+                            id: userinfo
+                            text: ''
+                        MDLabel:
+                            id: userlocation
+                            text: 'Las Pinas City'
