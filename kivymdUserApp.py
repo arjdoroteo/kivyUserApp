@@ -21,18 +21,18 @@ class AntiflameApp(MDApp):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        Clock.schedule_once(self.decryption, 1)
+        Clock.schedule_once(self.decryption, 2)
 
     def build(self):
         Window.size = [450, 800]
         return
 
-    def showDialog(self, temp, co, lpg):
+    def showDialog(self, dialogMessage):
         Clock.unschedule(self.event)
         if not self.dialog:
             self.dialog = MDDialog(
                 title='Emergency',
-                text='Limit Reached! Please check your system.',
+                text=dialogMessage,
                 buttons=[
                     MDFlatButton(
                         text="OK",
@@ -65,23 +65,24 @@ class AntiflameApp(MDApp):
         co_limit = 100
         lpg_limit = 10000
 
-        if float(temp) >= temp_limit or float(co) >= co_limit or float(lpg) >= lpg_limit:
-            self.showDialog(temp, co, lpg)
-        else:
-            pass
+        if float(temp) >= temp_limit:
+            self.showDialog(
+                'Your temperature is too high!\n Temperature: ' + temp + 'C')
+        elif float(co) >= co_limit:
+            self.showDialog('CO values are too high!\n CO: ' + co + 'PPM')
+        elif float(lpg) >= lpg_limit:
+            self.showDialog('LPG values are too high!\n LPG: ' + lpg + 'PPM')
 
         return dataList
 
     def displayData(self, dt):
         dataList = self.pymongo()
-        time.sleep(2)
         self.root.ids.temp.text = dataList[0] + ' C'
         self.root.ids.co.text = dataList[1] + ' PPM'
         self.root.ids.lpg.text = dataList[2] + ' PPM'
 
     def decryption(self, dt):
         dataList = self.pymongo()
-        time.sleep(2)
         cipherText = dataList[3]
 
         with open('cipher_file', 'rb') as c_file:
@@ -95,8 +96,7 @@ class AntiflameApp(MDApp):
         user_info_list = stringText.split(",")
         self.root.ids.userinfo.text = user_info_list[0]
         print(user_info_list)
-        time.sleep(2)
-        self.event = Clock.schedule_interval(self.displayData, 5)
+        self.event = Clock.schedule_interval(self.displayData, 10)
 
 
 if __name__ == "__main__":
