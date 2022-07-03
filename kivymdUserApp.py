@@ -60,6 +60,8 @@ class AntiflameApp(MDApp):
             dataList.append(lpg)
             cipherText = result['User Info']
             dataList.append(cipherText)
+            hash = result['Hash']
+            dataList.append(hash)
 
         temp_limit = 125
         co_limit = 100
@@ -84,18 +86,30 @@ class AntiflameApp(MDApp):
     def decryption(self, dt):
         dataList = self.pymongo()
         cipherText = dataList[3]
+        hashToBeChecked = dataList[4]
 
         with open('cipher_file', 'rb') as c_file:
             key = c_file.read(32)
             iv = c_file.read(16)
 
+        with open('hash_file', 'r') as h_file:
+            hash = h_file.read()
+
         cipher = AES.new(key, AES.MODE_CBC, iv)
         plainText = unpad(cipher.decrypt(cipherText), AES.block_size)
+        c_file.close()
+        h_file.close()
 
         stringText = plainText.decode('ascii')
         user_info_list = stringText.split(",")
         self.root.ids.userinfo.text = user_info_list[0]
         print(user_info_list)
+
+        if hash == hashToBeChecked:
+            print("Inegrity is verified")
+
+        else:
+            print('Decrypted text has been tampered.')
         self.event = Clock.schedule_interval(self.displayData, 10)
 
 
