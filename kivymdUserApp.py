@@ -28,7 +28,7 @@ class AntiflameApp(MDApp):
         return
 
     def showDialog(self, dialogMessage):
-        Clock.unschedule(self.event)
+        # Clock.unschedule(self.event)
         if not self.dialog:
             self.dialog = MDDialog(
                 title='Emergency',
@@ -41,11 +41,10 @@ class AntiflameApp(MDApp):
                 ]
             )
         self.dialog.open()
-        print(temp, co, lpg)
-        Clock.stop_clock()
+        # Clock.stop_clock()
 
     def close_dialog(self, obj):
-        self.event()
+        # self.event()
         self.dialog.dismiss()
 
     def pymongo(self):
@@ -65,7 +64,7 @@ class AntiflameApp(MDApp):
 
         temp_limit = 125
         co_limit = 100
-        lpg_limit = 10000
+        lpg_limit = 150
 
         if float(temp) >= temp_limit:
             self.showDialog(
@@ -73,7 +72,8 @@ class AntiflameApp(MDApp):
         elif float(co) >= co_limit:
             self.showDialog('CO values are too high!\n CO: ' + co + 'PPM')
         elif float(lpg) >= lpg_limit:
-            self.showDialog('LPG values are too high!\n LPG: ' + lpg + 'PPM')
+            self.showDialog(
+                'Low levels of LPG detected, there may be a gas leak!\n LPG: ' + lpg + ' PPM')
 
         return dataList
 
