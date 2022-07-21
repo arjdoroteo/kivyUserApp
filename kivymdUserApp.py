@@ -63,14 +63,15 @@ class AntiflameApp(MDApp):
             dataList.append(hash)
 
         temp_limit = 125
-        co_limit = 100
+        co_limit = 150
         lpg_limit = 150
 
         if float(temp) >= temp_limit:
             self.showDialog(
-                'Your temperature is too high!\n Temperature: ' + temp + 'C')
+                'Your temperature is too high!\n \nTemperature: ' + temp + 'C')
         elif float(co) >= co_limit:
-            self.showDialog('CO values are too high!\n CO: ' + co + 'PPM')
+            self.showDialog(
+                'CO values are too high! Be careful of Carbon Monoxide Poisoning. Please check your system immediately\n\n CO: ' + co + 'PPM')
         elif float(lpg) >= lpg_limit:
             self.showDialog(
                 'Low levels of LPG detected, there may be a gas leak!\n LPG: ' + lpg + ' PPM')
@@ -106,7 +107,7 @@ class AntiflameApp(MDApp):
         print(user_info_list)
 
         if hash == hashToBeChecked:
-            print("Inegrity is verified")
+            print("Integrity is verified")
 
         else:
             print('Decrypted text has been tampered.')
