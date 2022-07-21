@@ -23,14 +23,12 @@ class CentralApp(MDApp):
 
         return
 
-    def showDialog(self, temp, lpg, co):
+    def showDialog(self, dialogMessage):
         Clock.unschedule(self.event)
         if not self.dialog:
             self.dialog = MDDialog(
                 title='Emergency',
-                text='Limit Reached! Please check your system.' + 'Temperature: ' +
-                str(temp) + 'C ' + 'LPG: ' + str(lpg) +
-                'PPM ' + 'CO: ' + str(co) + 'PPM',
+                text=dialogMessage,
                 buttons=[
                     MDFlatButton(
                         text="OK",
@@ -39,7 +37,6 @@ class CentralApp(MDApp):
                 ]
             )
         self.dialog.open()
-        print(temp, co, lpg)
         Clock.stop_clock()
 
     def close_dialog(self, obj):
@@ -63,17 +60,22 @@ class CentralApp(MDApp):
 
     def compareData(self, data):
         temp_limit = 125
-        co_limit = 100
-        lpg_limit = 10000
+        co_limit = 150
+        lpg_limit = 150
 
         temp = data[1]
         lpg = data[2]
         co = data[3]
 
-        if float(temp) >= temp_limit or float(co) >= co_limit or float(lpg) >= lpg_limit:
-            self.showDialog(temp, lpg, co)
-        else:
-            pass
+        if float(temp) >= temp_limit:
+            self.showDialog(
+                'Your temperature is too high!\n \nTemperature: ' + str(temp) + 'C')
+        elif float(co) >= co_limit:
+            self.showDialog(
+                'CO values are too high! Be careful of Carbon Monoxide Poisoning. Please check your system immediately\n\n CO: ' + str(co) + 'PPM')
+        elif float(lpg) >= lpg_limit:
+            self.showDialog(
+                'Low levels of LPG detected, there may be a gas leak!\n LPG: ' + str(lpg) + ' PPM')
 
     def updateSidePanel(self, dt):
 
