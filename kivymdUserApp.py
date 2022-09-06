@@ -62,20 +62,22 @@ class AntiflameApp(MDApp):
             hash = result['Hash']
             dataList.append(hash)
 
-        temp_limit = 125
+        temp_limit = 80
         co_limit = 150
-        lpg_limit = 150
-
+        lpg_lower_limit = 150
+        lpg_upper_limit = 2000
         if float(temp) >= temp_limit:
             self.showDialog(
                 'Your temperature is too high!\n \nTemperature: ' + temp + 'C')
         elif float(co) >= co_limit:
             self.showDialog(
                 'CO values are too high! Be careful of Carbon Monoxide Poisoning. Please check your system immediately\n\n CO: ' + co + 'PPM')
-        elif float(lpg) >= lpg_limit:
+        elif float(lpg) >= lpg_lower_limit and float(lpg) < lpg_upper_limit:
             self.showDialog(
                 'Low levels of LPG detected, there may be a gas leak!\n LPG: ' + lpg + ' PPM')
-
+        elif float(lpg) > lpg_upper_limit:
+            self.showDialog(
+                'High levels of LPG detected, Health problems may arise!\n LPG: ' + lpg + ' PPM')
         return dataList
 
     def displayData(self, dt):

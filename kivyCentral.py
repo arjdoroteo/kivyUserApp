@@ -59,9 +59,10 @@ class CentralApp(MDApp):
         return data
 
     def compareData(self, data):
-        temp_limit = 125
+        temp_limit = 80
         co_limit = 150
-        lpg_limit = 150
+        lpg_lower_limit = 150
+        lpg_upper_limit = 2000
 
         temp = data[1]
         lpg = data[2]
@@ -73,7 +74,7 @@ class CentralApp(MDApp):
         elif float(co) >= co_limit:
             self.showDialog(
                 'CO values are too high! Be careful of Carbon Monoxide Poisoning. Please check your system immediately\n\n CO: ' + str(co) + 'PPM')
-        elif float(lpg) >= lpg_limit:
+        elif float(lpg) >= lpg_lower_limit and float(lpg) < lpg_upper_limit:
             self.showDialog(
                 'Low levels of LPG detected, there may be a gas leak!\n LPG: ' + str(lpg) + ' PPM')
 
