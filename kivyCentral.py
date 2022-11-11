@@ -60,7 +60,7 @@ class CentralApp(MDApp):
 
     def compareData(self, data):
         temp_limit = 80
-        co_limit = 150
+        co_limit = 25
         lpg_lower_limit = 150
         lpg_upper_limit = 2000
 
